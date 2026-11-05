@@ -1,0 +1,590 @@
+/*
+  Design notes
+  - One memorable element: the "contents bar", a single strip split by share, drawn with
+    textures (solid, stripes, dots, crosshatch) so it never relies on color alone.
+  - Everything else stays quiet: system fonts, one accent for actions, no cards.
+  - Monospace is used for exactly one thing: the extension itself.
+*/
+
+:root {
+  --paper: #f4f6f8;
+  --paper-2: #e8ecf0;
+  --ink: #17212b;
+  --ink-soft: #4b5a68;
+  --rule: #c3ccd5;
+  --tape: #2450d6;
+  --tape-ink: #ffffff;
+  --ok: #17724f;
+  --near: #8f5400;
+  --bad: #ae2a1d;
+
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-ext: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --measure: 38rem;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #10161c;
+    --paper-2: #1a232c;
+    --ink: #e7ecf1;
+    --ink-soft: #9aa9b7;
+    --rule: #2f3d4a;
+    --tape: #8eacff;
+    --tape-ink: #0b1220;
+    --ok: #52c79a;
+    --near: #e0a44a;
+    --bad: #ff8a7a;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+a {
+  color: var(--tape);
+  text-underline-offset: 0.15em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tape);
+  outline-offset: 2px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* Masthead */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 1.5rem;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* Buttons */
+
+.btn {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--paper-2);
+}
+
+.btn-primary {
+  background: var(--tape);
+  border-color: var(--tape);
+  color: var(--tape-ink);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--tape);
+  filter: brightness(1.08);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.25rem 0 0;
+}
+
+.status {
+  align-self: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* Intro */
+
+.lede {
+  font-size: 1.35rem;
+  line-height: 1.35;
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.intro p {
+  margin: 0 0 0.9rem;
+}
+
+.legend {
+  margin: 1.25rem 0 0;
+  padding: 0;
+}
+
+.legend dt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  margin-top: 0.9rem;
+}
+
+.legend dd {
+  margin: 0.15rem 0 0 1.6rem;
+  color: var(--ink-soft);
+}
+
+.legend code {
+  font-family: var(--font-ext);
+  font-size: 0.9em;
+  color: var(--ink);
+}
+
+.hint {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+/* Question */
+
+.progress {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.ext-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.25rem;
+}
+
+.ext {
+  margin: 0;
+  font-family: var(--font-ext);
+  font-weight: 600;
+  font-size: clamp(3rem, 15vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.ext:focus {
+  outline: none;
+}
+
+.group {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.question-prompt {
+  margin: 0.5rem 0 1rem;
+  color: var(--ink-soft);
+}
+
+.choices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.7rem 0.8rem;
+  cursor: pointer;
+}
+
+.choice:hover:not(:disabled) {
+  background: var(--paper-2);
+  border-color: var(--ink);
+}
+
+.choice:disabled {
+  cursor: default;
+  color: var(--ink);
+}
+
+.choice kbd {
+  font-family: var(--font-ext);
+  font-size: 0.8rem;
+  min-width: 1.4rem;
+  text-align: center;
+  padding: 0.05rem 0.3rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  color: var(--ink-soft);
+}
+
+.choice .tags {
+  display: inline-flex;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.choice.is-top {
+  border-left-color: var(--ok);
+  border-color: var(--ok);
+}
+
+.choice.is-chosen {
+  border-width: 2px;
+  border-left-width: 4px;
+  padding: calc(0.7rem - 1px) calc(0.8rem - 1px);
+}
+
+.choice.is-chosen:not(.is-top) {
+  border-color: var(--ink);
+}
+
+/* Textures. The same six are used for bars, swatches, and share rows. */
+
+.cat-0 { --tex-bg: var(--ink); }
+.cat-1 {
+  --tex-bg: repeating-linear-gradient(135deg, var(--ink) 0 2px, transparent 2px 5px);
+}
+.cat-2 {
+  --tex-bg: radial-gradient(circle at 3px 3px, var(--ink) 1.2px, transparent 1.6px) 0 0 / 6px 6px;
+}
+.cat-3 {
+  --tex-bg:
+    repeating-linear-gradient(45deg, var(--ink-soft) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(135deg, var(--ink-soft) 0 1px, transparent 1px 6px);
+}
+.cat-4 {
+  --tex-bg: repeating-linear-gradient(0deg, var(--ink) 0 2px, transparent 2px 5px);
+}
+.cat-5 {
+  --tex-bg: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 8px 8px;
+}
+
+.swatch {
+  display: inline-block;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+  border: 1px solid var(--ink);
+  background: var(--tex-bg);
+}
+
+/* Feedback */
+
+.feedback {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--ink);
+}
+
+.verdict {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.feedback[data-verdict="correct"] .verdict { color: var(--ok); }
+.feedback[data-verdict="close"] .verdict { color: var(--near); }
+.feedback[data-verdict="wrong"] .verdict { color: var(--bad); }
+
+/* Row: shared by quiz feedback and reference mode */
+
+.row {
+  margin: 0 0 1.75rem;
+}
+
+.row.is-target {
+  outline: 3px solid var(--tape);
+  outline-offset: 6px;
+}
+
+.row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin: 0 0 0.5rem;
+}
+
+.row-head .ext {
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.contents {
+  display: flex;
+  width: 100%;
+  height: 1.6rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.seg {
+  min-width: 2px;
+  background: var(--tex-bg);
+  border-right: 1px solid var(--ink);
+}
+
+.seg:last-child {
+  border-right: 0;
+}
+
+.shares {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.share {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.share .pct {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  min-width: 3ch;
+}
+
+.share .flag {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  min-width: 6.5rem;
+}
+
+.share.is-top {
+  font-weight: 700;
+}
+
+.share.is-top .flag {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.note {
+  margin: 0.8rem 0 0.3rem;
+}
+
+.meta {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.meta a {
+  margin-right: 0.2rem;
+}
+
+/* Debug panel */
+
+.debug {
+  margin: 0 0 1rem;
+  border-left: 2px solid var(--rule);
+  padding-left: 0.8rem;
+}
+
+.debug summary {
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.debug pre {
+  margin: 0.5rem 0 0;
+  font-family: var(--font-ext);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Results */
+
+.total {
+  font-size: clamp(2.5rem, 12vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.percent {
+  color: var(--ink-soft);
+  margin: 0.25rem 0 0.75rem;
+}
+
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  font-family: var(--font-ext);
+  font-size: 1.1rem;
+}
+
+.mark[data-verdict="correct"] { color: var(--ok); }
+.mark[data-verdict="close"] { color: var(--near); }
+.mark[data-verdict="wrong"] { color: var(--bad); }
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.debug-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.debug-table th,
+.debug-table td {
+  text-align: left;
+  padding: 0.3rem 0.6rem 0.3rem 0;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.debug-table th {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+/* Reference */
+
+.ref-intro {
+  color: var(--ink-soft);
+  margin: 0 0 0.5rem;
+}
+
+.group-title {
+  font-size: 1.1rem;
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+h2.screen-title {
+  font-size: 1.35rem;
+  margin: 0 0 0.5rem;
+}
+
+/* Colophon */
+
+.colophon {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.colophon p {
+  margin: 0;
+}
+
+/* Motion: only the bar reveal after a person answers. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .feedback .seg {
+    animation: grow 0.45s ease-out;
+  }
+
+  @keyframes grow {
+    from { flex-grow: 0; }
+  }
+}
+
+@media (max-width: 26rem) {
+  .choice {
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .choice .tags {
+    grid-column: 3;
+  }
+
+  .share {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .share .flag {
+    grid-column: 2 / -1;
+    min-width: 0;
+  }
+}

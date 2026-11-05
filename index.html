@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>What's in the box? A quiz on media file formats</title>
+  <meta name="description" content="Someone sends you a file. Is it uncompressed, lossless, lossy, or a container where it depends? A quiz and reference for common image, audio, and video file extensions.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <h1>What's in the box?</h1>
+      <button type="button" class="btn" id="ref-button">Answers/reference</button>
+    </header>
+
+    <main id="app" tabindex="-1">
+      <p class="loading">Loading the quiz…</p>
+      <noscript><p>This quiz needs JavaScript to run.</p></noscript>
+    </main>
+
+    <footer class="colophon">
+      <p>A static page with no tracking. Weights are editorial estimates. Spot a mistake? <a href="https://github.com/darthwalsh/media-quiz/issues">Open an issue</a>.</p>
+    </footer>
+  </div>
+
+  <div id="live" class="sr-only" aria-live="polite"></div>
+
+  <script type="module">
+    import { mount } from './main.js';
+    import { QUIZ_CONFIG } from './data.js';
+    mount(document, QUIZ_CONFIG);
+  </script>
+</body>
+</html>
