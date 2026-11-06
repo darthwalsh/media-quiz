@@ -386,7 +386,8 @@ Sources by row (store these in each item's `sources` array):
 - **dng:** https://en.wikipedia.org/wiki/Raw_image_format and https://www.loc.gov/preservation/digital/formats/fdd/fdd000241.shtml
 - **wav:** https://help.ableton.com/hc/en-us/articles/211427589 and https://learn.microsoft.com/en-us/windows/win32/xaudio2/resource-interchange-file-format--riff-
 - **flac:** https://datatracker.ietf.org/doc/rfc9639 and https://xiph.org/flac/ogg_mapping.html
-- **m4a, aac:** https://hydrogenaudio.org/index.php?msg=450245
+- **m4a:** https://en.wikipedia.org/wiki/Advanced_Audio_Coding and https://en.wikipedia.org/wiki/Apple_Lossless_Audio_Codec
+- **aac:** https://en.wikipedia.org/wiki/Advanced_Audio_Coding
 - **ogg:** https://xiph.org/flac/ogg_mapping.html
 - **webm:** https://en.wikipedia.org/wiki/WebM
 - **wmv:** https://en.wikipedia.org/wiki/Windows_Media_Video

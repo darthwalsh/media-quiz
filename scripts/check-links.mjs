@@ -46,6 +46,6 @@ async function worker() {
   }
 }
 
-await Promise.all(Array.from({ length: 4 }, worker));
+await Promise.all(Array.from({ length: 16 }, worker));
 console.log(`\n${urls.size} links checked, ${failures} failed, ${warnings} warnings.`);
 process.exit(failures > 0 ? 1 : 0);

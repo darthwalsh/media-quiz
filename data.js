@@ -8,7 +8,8 @@ const HEIF_LOC = 'https://loc.gov/preservation/digital/formats/fdd/fdd000525.sht
 const VIDEO_WIKI = 'https://en.wikipedia.org/wiki/Video_file_format';
 const MP4_WIKI = 'https://en.wikipedia.org/wiki/MP4_file_format';
 const XIPH_OGG = 'https://xiph.org/flac/ogg_mapping.html';
-const HYDROGEN_AAC = 'https://hydrogenaudio.org/index.php?msg=450245';
+const AAC_WIKI = 'https://en.wikipedia.org/wiki/Advanced_Audio_Coding';
+const ALAC_WIKI = 'https://en.wikipedia.org/wiki/Apple_Lossless_Audio_Codec';
 
 function w(uncompressed, lossless, lossy, depends) {
   return { uncompressed, lossless, lossy, depends };
@@ -235,7 +236,7 @@ export const QUIZ_CONFIG = {
       confidence: 'medium',
       checked: 'secondary',
       note: 'MP4 audio container holding AAC (lossy) or ALAC (lossless).',
-      sources: [HYDROGEN_AAC],
+      sources: [AAC_WIKI, ALAC_WIKI],
     },
     {
       id: 'aac',
@@ -245,7 +246,7 @@ export const QUIZ_CONFIG = {
       confidence: 'high',
       checked: 'secondary',
       note: 'Usually a bare ADTS stream with no container.',
-      sources: [HYDROGEN_AAC],
+      sources: [AAC_WIKI],
     },
     {
       id: 'ogg',
